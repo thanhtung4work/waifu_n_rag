@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>LLM RAG UI</title>
+</head>
+<body>
+    <div>
+        <p id="response"></p>
+    </div>
+    <div>
+        <input type="text" id="queryInput" placeholder="Enter your query">
+        <button onclick="callLLMService()">Send</button>
+    </div>
+
+    <script>
+        async function callLLMService() {
+            const query = document.getElementById("queryInput").value;
+            const responseParagraph = document.getElementById("response");
+
+            try {
+                const response = await fetch('http://172.16.87.78:12001/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+                responseParagraph.innerText = data.response;
+            } catch (error) {
+                console.error("Error:", error);
+                responseParagraph.innerText = "An error occurred. Please try again.";
+            }
+        }
+    </script>
+</body>
+</html>
